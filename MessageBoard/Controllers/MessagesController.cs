@@ -22,9 +22,19 @@ namespace MessageBoard.Controllers
 
         // GET: api/Messages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessages(string startDateString, string endDateString)
         {
-            return await _db.Messages.ToListAsync();
+
+          var query = _db.Messages.AsQueryable();
+
+          if (startDateString != null && endDateString != null)
+          {
+            DateTime startDate = DateTime.Parse(startDateString);
+            DateTime endDate = DateTime.Parse(endDateString);
+            query = query.Where(entry => entry.Date >= startDate && entry.Date <= endDate);
+          }
+
+          return await _db.Messages.ToListAsync();
         }
 
         // GET: api/Messages/5
@@ -75,12 +85,23 @@ namespace MessageBoard.Controllers
         // POST: api/Messages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(Message message)
+        public async Task<ActionResult<Message>> PostMessage(Message message, string name)
         {
-            _db.Messages.Add(message);
-            await _db.SaveChangesAsync();
+          var thisGroup = _db.Groups.Include(entry => entry.Messages).FirstOrDefault(entry => entry.Name == name);
 
-            return CreatedAtAction("GetMessage", new { id = message.MessageId }, message);
+          if (thisGroup != null)
+          {
+            message.Date = DateTime.Now;
+            message.GroupId = thisGroup.GroupId;
+            thisGroup.Messages.Add(message);
+            _db.Groups.Update(thisGroup);    
+            await _db.SaveChangesAsync();
+          }
+          else
+          {
+            return BadRequest();
+          }
+          return CreatedAtAction("Post", new { id = message.GroupId}, thisGroup);
         }
 
         // DELETE: api/Messages/5

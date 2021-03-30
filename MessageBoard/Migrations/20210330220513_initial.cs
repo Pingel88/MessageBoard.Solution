@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MessageBoard.Migrations
@@ -28,7 +29,7 @@ namespace MessageBoard.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
                     Author = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
-                    Date = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Contents = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
                     GroupId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -63,12 +64,12 @@ namespace MessageBoard.Migrations
                 columns: new[] { "MessageId", "Author", "Contents", "Date", "GroupId", "Title" },
                 values: new object[,]
                 {
-                    { 1, "Dwight", "Which bear is best?", "1/1/2021", 1, "Bears Question" },
-                    { 5, "Stephanie", "Do you like potatoes?", "5/4/2021", 1, "Potato Question" },
-                    { 6, "Jen", "which lion is strongest?", "6/4/2021", 1, "Lions Question" },
-                    { 2, "Jessica", "This homework sucks", "2/3/2021", 2, "Lesson 9 Homework" },
-                    { 4, "Jim", "I don't understand Lesson 16", "4/4/2021", 2, "Homework Help" },
-                    { 3, "Tim", "You can add to a list but not to an array", "3/4/2021", 3, "C# - Lists and Arrays" }
+                    { 1, "Dwight", "Which bear is best?", new DateTime(2021, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Bears Question" },
+                    { 5, "Stephanie", "Do you like potatoes?", new DateTime(2021, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Potato Question" },
+                    { 6, "Jen", "which lion is strongest?", new DateTime(2021, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Lions Question" },
+                    { 2, "Jessica", "This homework sucks", new DateTime(2021, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Lesson 9 Homework" },
+                    { 4, "Jim", "I don't understand Lesson 16", new DateTime(2021, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Homework Help" },
+                    { 3, "Tim", "You can add to a list but not to an array", new DateTime(2021, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, "C# - Lists and Arrays" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -8,9 +8,9 @@ namespace MessageBoard.Models
     {
       this.Messages = new HashSet<Message>();
     }
-    
+
     public int GroupId { get; set; }
     public string Name { get; set; }
-    public virtual ICollection<Message> Messages { get; set; }
+    public ICollection<Message> Messages { get; set; }
   }
 }
