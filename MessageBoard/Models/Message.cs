@@ -7,5 +7,7 @@ namespace MessageBoard.Models
     public string Author { get; set; }
     public string Date { get; set; }
     public string Contents { get; set; }
+    public int GroupId { get; set; }
+    public virtual Group Group { get; set; }
   }
 }
