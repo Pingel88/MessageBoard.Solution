@@ -22,9 +22,16 @@ namespace MessageBoard.Controllers
 
         // GET: api/Groups
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
+        public async Task<ActionResult<IEnumerable<Group>>> GetGroups(int groupid)
         {
-            return await _db.Groups.ToListAsync();
+            var query = _db.Groups.Include(entry => entry.Messages).AsQueryable();
+
+            if (groupid != 0)
+            {
+            query = query.Where(entry => entry.GroupId == groupid);
+            }
+
+            return await query.ToListAsync();
         }
 
         // GET: api/Groups/5
@@ -105,3 +112,6 @@ namespace MessageBoard.Controllers
         }
     }
 }
+
+// User.Identity.IsAuthenticated
+// User.Identity.Name
